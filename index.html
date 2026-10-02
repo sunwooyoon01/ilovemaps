@@ -3,56 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Endless Atlas</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap">
+<title>maps heaven</title>
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---wall:#b4bfb6;--text:#1d2622;--mat:#f5f4ef;--btn:#1d2622;--btntext:#f5f4ef}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wall:#151c19;--text:#d9e0db;--mat:#e9e8e1;--btn:#d9e0db;--btntext:#151c19}}
-:root[data-theme="dark"]{--wall:#151c19;--text:#d9e0db;--mat:#e9e8e1;--btn:#d9e0db;--btntext:#151c19}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
 *{box-sizing:border-box}
-body{margin:0;background:var(--wall);color:var(--text);font-family:'IM Fell English',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 28px}
-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-h1{font-size:1.5rem;font-weight:400;margin:0;font-style:italic}
-.filters{display:flex;gap:8px}
-select{font:inherit;font-size:.95rem;background:transparent;color:var(--text);border:1px solid var(--text);padding:5px 8px}
-select option{color:#1d2622;background:#f5f4ef}
-figure{margin:0;width:100%;max-width:900px;background:var(--mat);padding:clamp(10px,3vw,22px);box-shadow:0 1px 0 rgba(0,0,0,.2),0 14px 30px -12px rgba(0,0,0,.45);transition:opacity .35s}
+body{margin:0;background:#000;color:#fff;font-family:Helvetica,"Helvetica Neue",Arial,sans-serif;text-transform:lowercase;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 28px}
+header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+h1{font-size:1.1rem;font-weight:700;letter-spacing:.02em;margin:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+select{font:inherit;font-size:.85rem;text-transform:lowercase;background:#000;color:#fff;border:1px solid #fff;border-radius:0;padding:6px 8px}
+select option{text-transform:lowercase;background:#000;color:#fff}
+figure{margin:0;width:100%;max-width:900px;background:#000;border:1px solid #fff;padding:clamp(10px,2.5vw,18px);transition:opacity .35s}
 figure.fade{opacity:.25}
-#frame{display:flex;justify-content:center;align-items:center;min-height:240px;background:#e6e4dc}
+#frame{display:flex;justify-content:center;align-items:center;min-height:240px}
 #frame img{display:block;max-width:100%;max-height:72vh;object-fit:contain}
-#status{color:#555;font-style:italic;padding:40px 10px;text-align:center}
-figcaption{color:#2a2a26;padding:16px 4px 4px;max-width:70ch}
-h2{font-size:1.3rem;font-weight:400;font-style:italic;margin:0 0 6px}
-#meta{margin:0 0 8px;font-size:1.05rem;line-height:1.45}
-#src{margin:0;font-size:.9rem;color:#4a4a44}
+#status{color:#999;padding:40px 10px;text-align:center;font-size:.9rem}
+figcaption{color:#fff;padding:16px 2px 2px;max-width:72ch}
+h2{font-size:1.05rem;font-weight:700;margin:0 0 6px}
+#meta{margin:0 0 8px;font-size:.95rem;line-height:1.45}
+#src{margin:0;font-size:.8rem;color:#999}
 #src a{color:inherit}
 nav{display:flex;gap:12px;margin-top:18px}
-button{font:inherit;font-size:1.05rem;background:transparent;color:var(--text);border:1.5px solid var(--text);padding:9px 20px;cursor:pointer}
-button.main{background:var(--btn);color:var(--btntext)}
-button:focus-visible,select:focus-visible{outline:3px solid var(--text);outline-offset:3px}
+button{font:inherit;font-size:.9rem;text-transform:lowercase;background:#000;color:#fff;border:1px solid #fff;border-radius:0;padding:9px 20px;cursor:pointer}
+button.main{background:#fff;color:#000}
+button:hover:not(:disabled){text-decoration:underline}
+button:focus-visible,select:focus-visible{outline:2px solid #fff;outline-offset:3px}
 button:disabled{opacity:.35;cursor:default}
-@media (prefers-reduced-motion:reduce){figure{transition:none}}
+#trace{position:relative;width:100%;max-width:900px;height:52px;margin-top:22px;overflow:hidden}
+.th{position:absolute;left:0;top:0;padding:0;border:1px solid #fff;background:#000;cursor:pointer;overflow:hidden;transition:transform .55s ease,opacity .55s ease}
+.th img{display:block;width:100%;height:100%;object-fit:cover}
+@media (prefers-reduced-motion:reduce){figure{transition:none}.th{transition:none}}
 </style>
 </head>
 <body>
 <header>
- <h1>The Endless Atlas</h1>
+ <h1>maps heaven</h1>
  <div class="filters">
-  <select id="topic" aria-label="Subject">
-   <option value="maps">Maps</option><option value="stars">Star charts</option><option value="plans">City plans</option><option value="charts">Sea charts</option>
+  <select id="topic" aria-label="subject">
+   <option value="random">random subject</option><option value="maps">maps</option><option value="stars">star charts</option><option value="plans">city plans</option><option value="charts">sea charts</option><option value="science">scientific diagrams</option><option value="nature">natural history plates</option><option value="mnemonic">mnemonic diagrams</option>
   </select>
-  <select id="era" aria-label="Era">
-   <option value="">Any era</option><option value="1500/1699">1500s–1600s</option><option value="1700/1799">1700s</option><option value="1800/1899">1800s</option><option value="1900/1950">1900–1950</option>
+  <select id="era" aria-label="era">
+   <option value="">any era</option><option value="1500/1699">1500s–1600s</option><option value="1700/1799">1700s</option><option value="1800/1899">1800s</option><option value="1900/1950">1900–1950</option>
   </select>
  </div>
 </header>
 <figure id="fig">
- <div id="frame"><div id="status">Finding a plate…</div></div>
+ <div id="frame"><div id="status">finding a plate…</div></div>
  <figcaption><h2 id="t"></h2><p id="meta"></p><p id="src"></p></figcaption>
 </figure>
-<nav><button id="back" disabled>Previous plate</button><button id="next" class="main">Next plate</button></nav>
+<nav><button id="back" disabled>previous plate</button><button id="next" class="main">next plate</button></nav>
+<div id="trace" aria-label="recently seen plates"></div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -61,7 +62,10 @@ const TOPICS={
  maps:{loc:['map','atlas','topographical map','province map','world map'],wm:['old map','historical map','antique map']},
  stars:{loc:['celestial chart','star chart','constellations'],wm:['celestial map','star chart','constellation atlas']},
  plans:{loc:['city plan','plan of the city','bird\'s-eye view'],wm:['old city plan','historic city map','town plan']},
- charts:{loc:['nautical chart','chart of the coast','harbor chart'],wm:['nautical chart','sea chart','portolan']}
+ charts:{loc:['nautical chart','chart of the coast','harbor chart'],wm:['nautical chart','sea chart','portolan']},
+ science:{wm:['scientific diagram','astronomical diagram','cosmological diagram','geometric diagram','physics illustration','chart of the elements']},
+ nature:{wm:['anatomical plate','botanical plate','natural history plate','zoological illustration','kunstformen der natur','scientific illustration']},
+ mnemonic:{wm:['mnemonic diagram','memory palace','ars memorativa','tree of knowledge','mnemonic chart','diagram of the sciences','tree of porphyry']}
 };
 const clean=s=>(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/\s+/g,' ').replace(/[\s\/:;,.]+$/,'').trim();
 const first=v=>Array.isArray(v)?v[0]:v;
@@ -83,7 +87,7 @@ async function fromLoC(topic,era){
  const img=(ok||sized[sized.length-1]).u;
  const c=first(r.contributor)||first(r.contributor_names)||'';
  return{img,title:clean(r.title),by:clean(c).replace(/\b\w/g,m=>m.toUpperCase()),date:clean(r.date||''),
-  source:'Library of Congress',link:r.url||r.id,rights:'Digitized item; see source page for rights'};
+  source:'Library of Congress',link:r.url||r.id,rights:'digitized item; see source page for rights'};
 }
 
 async function fromCommons(topic,era){
@@ -100,27 +104,54 @@ async function fromCommons(topic,era){
 }
 
 const loadImg=src=>new Promise((res,rej)=>{const i=new Image(),t=setTimeout(()=>rej(new Error('image timed out')),15000);i.alt='';i.onload=()=>{clearTimeout(t);res(i)};i.onerror=()=>{clearTimeout(t);rej(new Error('image failed to load'))};i.src=src});
+const LABEL={maps:'map',stars:'star chart',plans:'city plan',charts:'sea chart',science:'scientific diagram',nature:'natural history plate',mnemonic:'mnemonic diagram'};
 async function fetchPlate(){
- const topic=$('topic').value,era=$('era').value,errs=[];
- const srcs=[['Library of Congress',fromLoC],['Wikimedia Commons',fromCommons]];
- if(Math.random()<.5)srcs.reverse();
+ const sel=$('topic').value,era=$('era').value,errs=[];
  for(let n=0;n<6;n++){
-  const [name,f]=srcs[n%2];
-  try{const p=await f(topic,era);p.el=await loadImg(p.img);return p}
+  const tp=sel==='random'?pick(Object.keys(TOPICS)):sel;
+  let srcs=[['library of congress',fromLoC],['wikimedia commons',fromCommons]];
+  if(!TOPICS[tp].loc)srcs=[srcs[1]];
+  const [name,f]=pick(srcs);
+  try{const p=await f(tp,era);p.kind=tp;p.el=await loadImg(p.img);return p}
   catch(e){errs.push(name+': '+(e.name==='AbortError'?'request timed out':e.message))}
  }
  const err=new Error('none');err.detail=[...new Set(errs)];throw err;
 }
 
 let hist=[],pos=-1,busy=false;
+const tr=$('trace'),thumbs=new Map(),SLOTS=6;
+const seen=()=>hist.slice(Math.max(0,pos-SLOTS),pos);
+function updateTrace(){
+ const prev=seen(),step=Math.min(80,(tr.clientWidth||480)/SLOTS),tw=step-8,th=Math.round(tw*.72);
+ tr.style.height=th+'px';
+ const place=(el,x,o)=>{el.style.transform='translateX('+x+'px)';el.style.opacity=o};
+ prev.forEach((p,i)=>{
+  const age=prev.length-1-i;
+  let el=thumbs.get(p);
+  if(!el){
+   el=document.createElement('button');el.className='th';el.title=p.title;el.setAttribute('aria-label','revisit: '+p.title);
+   const im=document.createElement('img');im.src=p.img;im.alt='';el.append(im);
+   el.onclick=()=>{pos=hist.indexOf(p);render(p)};
+   el.style.width=tw+'px';el.style.height=th+'px';
+   place(el,SLOTS*step,0);tr.append(el);thumbs.set(p,el);el.getBoundingClientRect();
+  }
+  el.style.width=tw+'px';el.style.height=th+'px';
+  place(el,(SLOTS-1-age)*step,Math.max(.12,.9-age*.15));
+ });
+ thumbs.forEach((el,p)=>{
+  if(!prev.includes(p)){place(el,-step,0);setTimeout(()=>{if(!seen().includes(p)){el.remove();thumbs.delete(p)}},700)}
+ });
+}
+addEventListener('resize',updateTrace);
 function render(p){
  const fr=$('frame');fr.replaceChildren(p.el);p.el.alt=p.title;
  $('t').textContent=p.title;
  $('meta').textContent=[p.by,p.date].filter(Boolean).join(', ');
- const s=$('src');s.replaceChildren(document.createTextNode('Source: '));
+ const s=$('src');s.replaceChildren(document.createTextNode('source: '));
  const a=document.createElement('a');a.href=p.link;a.target='_blank';a.rel='noopener';a.textContent=p.source;s.append(a);
- if(p.rights)s.append(document.createTextNode(' · '+p.rights));
+ s.append(document.createTextNode(' · '+LABEL[p.kind]+(p.rights?' · '+p.rights:'')));
  $('back').disabled=pos<=0;
+ updateTrace();
 }
 async function go(dir){
  if(busy)return;
@@ -128,11 +159,11 @@ async function go(dir){
  if(pos<hist.length-1){pos++;render(hist[pos]);return}
  busy=true;$('fig').classList.add('fade');$('next').disabled=true;
  try{const p=await fetchPlate();hist.push(p);pos=hist.length-1;render(p)}
- catch(e){const d=document.createElement('div');d.id='status';d.textContent="Couldn't load a plate. "+(e.detail||[e.message]).join(' | ');$('frame').replaceChildren(d)}
+ catch(e){const d=document.createElement('div');d.id='status';d.textContent="couldn't load a plate. "+(e.detail||[e.message]).join(' | ');$('frame').replaceChildren(d)}
  busy=false;$('fig').classList.remove('fade');$('next').disabled=false;
 }
 $('next').onclick=()=>go(1);$('back').onclick=()=>go(-1);
-['topic','era'].forEach(id=>$(id).onchange=()=>{hist=[];pos=-1;go(1)});
+['topic','era'].forEach(id=>$(id).onchange=()=>{hist=[];pos=-1;updateTrace();go(1)});
 addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1)}if(e.key==='ArrowLeft')go(-1)});
 go(1);
 </script>
