@@ -1,38 +1,140 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.6">
-  <style type="text/css">
-    body {background-color: #a5b2a7}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.4px Times; color: #161d1a; -webkit-text-stroke: #161d1a; background-color: #f2f1eb}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.4px 'Helvetica Neue'; color: #161d1a; -webkit-text-stroke: #161d1a; background-color: #a5b2a7; min-height: 13.0px}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.4px 'Helvetica Neue'; color: #161d1a; -webkit-text-stroke: #161d1a; min-height: 13.0px}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 12.0px 'Helvetica Neue'; color: #434343; -webkit-text-stroke: #434343}
-    p.p7 {margin: 0.0px 0.0px 8.0px 0.0px; font: 12.6px 'Helvetica Neue'; color: #1f201d; -webkit-text-stroke: #1f201d; min-height: 15.0px}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.8px 'Helvetica Neue'; color: #3a3a34; -webkit-text-stroke: #3a3a34; min-height: 12.0px}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 12.6px 'Helvetica Neue'; color: #161d1a; -webkit-text-stroke: #161d1a}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 12.6px 'Helvetica Neue'; color: #f2f1eb; -webkit-text-stroke: #f2f1eb; background-color: #161d1a}
-    span.s1 {font-kerning: none}
-    span.s2 {font: 11.4px 'Helvetica Neue'; font-kerning: none; background-color: #a5b2a7}
-    span.s3 {font-kerning: none; background-color: #a5b2a7}
-    span.s4 {font-kerning: none; background-color: #e0ded4}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Endless Atlas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--wall:#b4bfb6;--text:#1d2622;--mat:#f5f4ef;--btn:#1d2622;--btntext:#f5f4ef}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wall:#151c19;--text:#d9e0db;--mat:#e9e8e1;--btn:#d9e0db;--btntext:#151c19}}
+:root[data-theme="dark"]{--wall:#151c19;--text:#d9e0db;--mat:#e9e8e1;--btn:#d9e0db;--btntext:#151c19}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--wall);color:var(--text);font-family:'IM Fell English',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 28px}
+header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+h1{font-size:1.5rem;font-weight:400;margin:0;font-style:italic}
+.filters{display:flex;gap:8px}
+select{font:inherit;font-size:.95rem;background:transparent;color:var(--text);border:1px solid var(--text);padding:5px 8px}
+select option{color:#1d2622;background:#f5f4ef}
+figure{margin:0;width:100%;max-width:900px;background:var(--mat);padding:clamp(10px,3vw,22px);box-shadow:0 1px 0 rgba(0,0,0,.2),0 14px 30px -12px rgba(0,0,0,.45);transition:opacity .35s}
+figure.fade{opacity:.25}
+#frame{display:flex;justify-content:center;align-items:center;min-height:240px;background:#e6e4dc}
+#frame img{display:block;max-width:100%;max-height:72vh;object-fit:contain}
+#status{color:#555;font-style:italic;padding:40px 10px;text-align:center}
+figcaption{color:#2a2a26;padding:16px 4px 4px;max-width:70ch}
+h2{font-size:1.3rem;font-weight:400;font-style:italic;margin:0 0 6px}
+#meta{margin:0 0 8px;font-size:1.05rem;line-height:1.45}
+#src{margin:0;font-size:.9rem;color:#4a4a44}
+#src a{color:inherit}
+nav{display:flex;gap:12px;margin-top:18px}
+button{font:inherit;font-size:1.05rem;background:transparent;color:var(--text);border:1.5px solid var(--text);padding:9px 20px;cursor:pointer}
+button.main{background:var(--btn);color:var(--btntext)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--text);outline-offset:3px}
+button:disabled{opacity:.35;cursor:default}
+@media (prefers-reduced-motion:reduce){figure{transition:none}}
+</style>
 </head>
 <body>
-<h1 style="margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px 'Helvetica Neue'; color: #161d1a; -webkit-text-stroke: #161d1a; background-color: #a5b2a7"><span class="s1">The Endless Atlas</span></h1>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">   </span></span><span class="s1">MapsStar chartsCity plansSea charts</span></p>
-<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">   </span></span><span class="s1">Any era1500s–1600s1700s1800s1900–1950</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">  </span></span></p>
-<p class="p5"><span class="s4">Finding a plate…</span></p>
-<h2 style="margin: 0.0px 0.0px 6.0px 0.0px; font: 15.6px 'Helvetica Neue'; color: #1f201d; -webkit-text-stroke: #1f201d; min-height: 18.0px"><span class="s1"></span><br></h2>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p8"><span class="s1"></span><br></p>
-<p class="p9"><span class="s3">Previous plate</span></p>
-<p class="p10"><span class="s1">Next plate</span></p>
+<header>
+ <h1>The Endless Atlas</h1>
+ <div class="filters">
+  <select id="topic" aria-label="Subject">
+   <option value="maps">Maps</option><option value="stars">Star charts</option><option value="plans">City plans</option><option value="charts">Sea charts</option>
+  </select>
+  <select id="era" aria-label="Era">
+   <option value="">Any era</option><option value="1500/1699">1500s–1600s</option><option value="1700/1799">1700s</option><option value="1800/1899">1800s</option><option value="1900/1950">1900–1950</option>
+  </select>
+ </div>
+</header>
+<figure id="fig">
+ <div id="frame"><div id="status">Finding a plate…</div></div>
+ <figcaption><h2 id="t"></h2><p id="meta"></p><p id="src"></p></figcaption>
+</figure>
+<nav><button id="back" disabled>Previous plate</button><button id="next" class="main">Next plate</button></nav>
+
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[rnd(0,a.length-1)];
+const TOPICS={
+ maps:{loc:['map','atlas','topographical map','province map','world map'],wm:['old map','historical map','antique map']},
+ stars:{loc:['celestial chart','star chart','constellations'],wm:['celestial map','star chart','constellation atlas']},
+ plans:{loc:['city plan','plan of the city','bird\'s-eye view'],wm:['old city plan','historic city map','town plan']},
+ charts:{loc:['nautical chart','chart of the coast','harbor chart'],wm:['nautical chart','sea chart','portolan']}
+};
+const clean=s=>(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/\s+/g,' ').replace(/[\s\/:;,.]+$/,'').trim();
+const first=v=>Array.isArray(v)?v[0]:v;
+async function getJSON(url,ms=9000){
+ const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);
+ try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}
+ finally{clearTimeout(t)}
+}
+
+async function fromLoC(topic,era){
+ const q=pick(TOPICS[topic].loc);
+ const url=`https://www.loc.gov/maps/?q=${encodeURIComponent(q)}${era?'&dates='+era:''}&fo=json&c=25&sp=${rnd(1,30)}&at=results`;
+ const j=await getJSON(url);
+ const items=(j.results||[]).filter(r=>r.image_url&&r.image_url.length&&r.title);
+ if(!items.length)throw new Error('loc empty');
+ const r=pick(items),imgs=r.image_url;
+ const sized=imgs.map(u=>({u,w:+((u.match(/[#&]w=(\d+)/)||[])[1]||0)}));
+ const ok=sized.filter(x=>x.w>=800).sort((a,b)=>a.w-b.w)[0];
+ const img=(ok||sized[sized.length-1]).u;
+ const c=first(r.contributor)||first(r.contributor_names)||'';
+ return{img,title:clean(r.title),by:clean(c).replace(/\b\w/g,m=>m.toUpperCase()),date:clean(r.date||''),
+  source:'Library of Congress',link:r.url||r.id,rights:'Digitized item; see source page for rights'};
+}
+
+async function fromCommons(topic,era){
+ const [y0,y1]=era?era.split('/').map(Number):[0,0];
+ const yr=era?' '+rnd(y0,y1):'';
+ const term=pick(TOPICS[topic].wm)+yr;
+ const url='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=20&gsroffset='+rnd(0,120)+'&gsrsearch='+encodeURIComponent(term+' filetype:bitmap')+'&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=1400';
+ const j=await getJSON(url);
+ const pages=Object.values((j.query&&j.query.pages)||{}).filter(p=>p.imageinfo&&p.imageinfo[0].thumburl&&p.imageinfo[0].width>600);
+ if(!pages.length)throw new Error('wm empty');
+ const p=pick(pages),ii=p.imageinfo[0],m=ii.extmetadata||{},v=k=>clean(m[k]&&m[k].value);
+ return{img:ii.thumburl,title:v('ObjectName')||clean(p.title.replace(/^File:|\.\w+$/g,'')),by:v('Artist'),date:v('DateTimeOriginal'),
+  source:'Wikimedia Commons',link:ii.descriptionurl,rights:v('LicenseShortName')};
+}
+
+const loadImg=src=>new Promise((res,rej)=>{const i=new Image(),t=setTimeout(()=>rej(new Error('image timed out')),15000);i.alt='';i.onload=()=>{clearTimeout(t);res(i)};i.onerror=()=>{clearTimeout(t);rej(new Error('image failed to load'))};i.src=src});
+async function fetchPlate(){
+ const topic=$('topic').value,era=$('era').value,errs=[];
+ const srcs=[['Library of Congress',fromLoC],['Wikimedia Commons',fromCommons]];
+ if(Math.random()<.5)srcs.reverse();
+ for(let n=0;n<6;n++){
+  const [name,f]=srcs[n%2];
+  try{const p=await f(topic,era);p.el=await loadImg(p.img);return p}
+  catch(e){errs.push(name+': '+(e.name==='AbortError'?'request timed out':e.message))}
+ }
+ const err=new Error('none');err.detail=[...new Set(errs)];throw err;
+}
+
+let hist=[],pos=-1,busy=false;
+function render(p){
+ const fr=$('frame');fr.replaceChildren(p.el);p.el.alt=p.title;
+ $('t').textContent=p.title;
+ $('meta').textContent=[p.by,p.date].filter(Boolean).join(', ');
+ const s=$('src');s.replaceChildren(document.createTextNode('Source: '));
+ const a=document.createElement('a');a.href=p.link;a.target='_blank';a.rel='noopener';a.textContent=p.source;s.append(a);
+ if(p.rights)s.append(document.createTextNode(' · '+p.rights));
+ $('back').disabled=pos<=0;
+}
+async function go(dir){
+ if(busy)return;
+ if(dir<0){if(pos>0){pos--;render(hist[pos])}return}
+ if(pos<hist.length-1){pos++;render(hist[pos]);return}
+ busy=true;$('fig').classList.add('fade');$('next').disabled=true;
+ try{const p=await fetchPlate();hist.push(p);pos=hist.length-1;render(p)}
+ catch(e){const d=document.createElement('div');d.id='status';d.textContent="Couldn't load a plate. "+(e.detail||[e.message]).join(' | ');$('frame').replaceChildren(d)}
+ busy=false;$('fig').classList.remove('fade');$('next').disabled=false;
+}
+$('next').onclick=()=>go(1);$('back').onclick=()=>go(-1);
+['topic','era'].forEach(id=>$(id).onchange=()=>{hist=[];pos=-1;go(1)});
+addEventListener('keydown',e=>{if(e.target.tagName==='SELECT')return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1)}if(e.key==='ArrowLeft')go(-1)});
+go(1);
+</script>
 </body>
 </html>
