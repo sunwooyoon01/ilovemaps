@@ -73,7 +73,7 @@ const clean=s=>(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/\s+
 const first=v=>Array.isArray(v)?v[0]:v;
 async function getJSON(url,ms=9000){
  const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);
- try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}
+ try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status+' from '+new URL(url).hostname);return await r.json()}
  finally{clearTimeout(t)}
 }
 
@@ -104,12 +104,13 @@ function markSeen(p){
 }
 
 /* --- sources --- */
-const PROXY='https://maps-heaven.sunwooy19.workers.dev/'; // paste your cloudflare worker url here to switch on smithsonian + bhl
+const PROXY=''; // paste your cloudflare worker url here to switch on smithsonian + bhl
+const API=PROXY.trim().replace(/\/+$/,'');
 const SIQ={maps:['map','atlas'],stars:['celestial chart','star chart'],charts:['nautical chart'],plans:['city plan'],science:['scientific diagram','astronomical chart','scientific illustration','mnemonic diagram'],nature:['botanical illustration','natural history illustration','anatomical illustration'],animals:['animal photograph','taxidermy specimen','zoo photograph','bird illustration','animal print']};
 const BHLQ={maps:['atlas maps'],stars:['astronomy atlas'],science:['anatomy plates','astronomy diagrams','physics plates'],nature:['botanical plates','natural history plates','fishes plates'],animals:['birds plates','mammals plates','insects plates','animals illustrations']};
 async function fromSI(tp,era){
  const q=pick(SIQ[tp])+' AND online_media_type:"Images"';
- const j=await getJSON(PROXY+'/si?q='+encodeURIComponent(q)+'&rows=40&start='+rnd(0,200)+'&sort=random');
+ const j=await getJSON(API+'/si?q='+encodeURIComponent(q)+'&rows=40&start='+rnd(0,200)+'&sort=random');
  const c=((j.response&&j.response.rows)||[]).map(r=>{
   const d=r.content||{},dn=d.descriptiveNonRepeating||{},fr=d.freetext||{};
   const m=((dn.online_media||{}).media||[]).find(x=>/image/i.test(x.type||'')&&(!x.usage||x.usage.access==='CC0'));
@@ -120,7 +121,7 @@ async function fromSI(tp,era){
  return choose(c,era);
 }
 async function fromBHL(tp,era){
- const b=op=>PROXY+'/bhl?op='+op;
+ const b=op=>API+'/bhl?op='+op;
  const sr=await getJSON(b('PublicationSearch')+'&searchterm='+encodeURIComponent(pick(BHLQ[tp]))+'&searchtype=C&page='+rnd(1,5));
  const hits=(sr.Result||[]).filter(r=>r.ItemID);
  if(!hits.length)throw new Error('no results');
@@ -162,10 +163,12 @@ async function fromCommons(tp,era){
  }).filter(p=>t.re.test(p._txt)&&!BAD.test(p._txt));
  return choose(c,era);
 }
-const MET='https://collectionapi.metmuseum.org/public/collection/v1/';
+const MET='https://collectionapi.metmuseum.org/public/collection/v1/',MET11='https://collectionapi.metmuseum.org/public/collection/v1.1/';
 async function fromMet(tp,era){
  const t=TOPICS[tp],[y0,y1]=era?era.split('/').map(Number):[0,0];
- const j=await getJSON(MET+'search?hasImages=true&isPublicDomain=true&q='+encodeURIComponent(pick(t.met))+(era?'&dateBegin='+y0+'&dateEnd='+y1:''));
+ const qs='search?hasImages=true&isPublicDomain=true&limit=100&q='+encodeURIComponent(pick(t.met))+(era?'&dateBegin='+y0+'&dateEnd='+y1:'');
+ let j=await getJSON(MET11+qs+'&offset='+rnd(0,200));
+ if(!(j.objectIDs||[]).length)j=await getJSON(MET11+qs);
  const ids=(j.objectIDs||[]).sort(()=>Math.random()-.5).slice(0,10);
  if(!ids.length)throw new Error('no results');
  const objs=await Promise.all(ids.map(id=>getJSON(MET+'objects/'+id).catch(()=>null)));
