@@ -123,14 +123,16 @@ async function fromSI(tp,era){
 async function fromBHL(tp,era){
  const b=op=>API+'/bhl?op='+op;
  const sr=await getJSON(b('PublicationSearch')+'&searchterm='+encodeURIComponent(pick(BHLQ[tp]))+'&searchtype=C&page='+rnd(1,5));
+ if(sr.Status&&sr.Status!=='ok')throw new Error('bhl said: '+(sr.ErrorMessage||sr.Status));
  const hits=(sr.Result||[]).filter(r=>r.ItemID);
  if(!hits.length)throw new Error('no results');
  const it=pick(hits);
  const m=await getJSON(b('GetItemMetadata')+'&id='+it.ItemID+'&pages=t&ocr=f&parts=f',15000);
+ if(m.Status&&m.Status!=='ok')throw new Error('bhl said: '+(m.ErrorMessage||m.Status));
  let R=m.Result;if(Array.isArray(R))R=R[0];R=R||{};
- const pages=(R.Pages||[]).filter(p=>(p.PageTypes||[]).some(t=>/illustration|plate|map|chart|diagram|table/i.test(t.PageTypeName||'')));
- if(!pages.length)throw new Error('no illustrated pages');
- const c=pages.sort(()=>Math.random()-.5).slice(0,12).map(p=>({id:'bhl:'+p.PageID,img:'https://www.biodiversitylibrary.org/pageimage/'+p.PageID,
+ const pages=(R.Pages||[]).filter(p=>(p.PageTypes||[]).some(t=>/illustration|map|foldout|chart|diagram/i.test(t.PageTypeName||'')));
+ if(!pages.length)throw new Error('no illustrated pages in item '+it.ItemID+' ('+((R.Pages||[]).length)+' pages)');
+ const c=pages.sort(()=>Math.random()-.5).slice(0,12).map(p=>({id:'bhl:'+p.PageID,img:p.FullSizeImageUrl||('https://www.biodiversitylibrary.org/pageimage/'+p.PageID),
   title:clean(R.ShortTitle||R.Title||it.Title||'')+(p.PageNumbers&&p.PageNumbers[0]&&p.PageNumbers[0].Number?', p. '+p.PageNumbers[0].Number:''),
   by:clean(((R.Authors||it.Authors||[])[0]||{}).Name||''),date:clean(String(R.Year||R.StartYear||it.PublicationDate||'')),
   source:'biodiversity heritage library',link:'https://www.biodiversitylibrary.org/page/'+p.PageID,rights:'see source page for rights'}));
@@ -182,11 +184,14 @@ async function fetchPlate(){
  const sel=$('topic').value,era=$('era').value,errs=[];
  for(let n=0;n<8;n++){
   const tp=sel==='random'?pick(Object.keys(TOPICS)):sel,t=TOPICS[tp];
-  const srcs=[['wikimedia commons',fromCommons]];
-  if(t.loc)srcs.push(['library of congress',fromLoC]);
-  if(t.met)srcs.push(['the met museum',fromMet]);
-  if(PROXY&&SIQ[tp])srcs.push(['smithsonian',fromSI]);
-  if(PROXY&&BHLQ[tp])srcs.push(['biodiversity heritage library',fromBHL]);
+  let srcs=[['wikimedia commons',fromCommons,'wm']];
+  if(t.loc)srcs.push(['library of congress',fromLoC,'loc']);
+  if(t.met)srcs.push(['the met museum',fromMet,'met']);
+  if(PROXY&&SIQ[tp])srcs.push(['smithsonian',fromSI,'si']);
+  if(PROXY&&BHLQ[tp])srcs.push(['biodiversity heritage library',fromBHL,'bhl']);
+  const only=new URLSearchParams(location.search).get('src');
+  if(only)srcs=srcs.filter(x=>x[2]===only);
+  if(!srcs.length){errs.push('no "'+only+'" source for '+tp);continue}
   const [name,f]=pick(srcs);
   try{const p=await f(tp,era);p.kind=tp;p.el=await loadImg(p.img);markSeen(p);return p}
   catch(e){errs.push(name+': '+(e.name==='AbortError'?'request timed out':e.message))}
