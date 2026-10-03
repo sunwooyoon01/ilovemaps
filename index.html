@@ -104,7 +104,7 @@ function markSeen(p){
 }
 
 /* --- sources --- */
-const PROXY=''; // paste your cloudflare worker url here to switch on smithsonian + bhl
+const PROXY='https://maps-heaven.sunwooy19.workers.dev'; // paste your cloudflare worker url here to switch on smithsonian + bhl
 const API=PROXY.trim().replace(/\/+$/,'');
 const SIQ={maps:['map','atlas'],stars:['celestial chart','star chart'],charts:['nautical chart'],plans:['city plan'],science:['scientific diagram','astronomical chart','scientific illustration','mnemonic diagram'],nature:['botanical illustration','natural history illustration','anatomical illustration'],animals:['animal photograph','taxidermy specimen','zoo photograph','bird illustration','animal print']};
 const BHLQ={maps:['atlas maps'],stars:['astronomy atlas'],science:['anatomy plates','astronomy diagrams','physics plates'],nature:['botanical plates','natural history plates','fishes plates'],animals:['birds plates','mammals plates','insects plates','animals illustrations']};
