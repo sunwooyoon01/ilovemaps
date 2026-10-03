@@ -41,7 +41,7 @@ button:disabled{opacity:.35;cursor:default}
  <h1>maps heaven</h1>
  <div class="filters">
   <select id="topic" aria-label="subject">
-   <option value="random">random subject</option><option value="maps">maps</option><option value="stars">star charts</option><option value="plans">city plans</option><option value="charts">sea charts</option><option value="science">scientific diagrams</option><option value="nature">natural history plates</option><option value="mnemonic">mnemonic diagrams</option><option value="animals">animals</option>
+   <option value="random">random subject</option><option value="maps">maps</option><option value="stars">star charts</option><option value="plans">city plans</option><option value="charts">sea charts</option><option value="science">scientific diagrams</option><option value="nature">natural history plates</option><option value="animals">animals</option>
   </select>
   <select id="era" aria-label="era">
    <option value="">any era</option><option value="1500/1699">1500s–1600s</option><option value="1700/1799">1700s</option><option value="1800/1899">1800s</option><option value="1900/1950">1900–1950</option>
@@ -63,12 +63,11 @@ const TOPICS={
  stars:{loc:['celestial chart','star chart','constellations'],wm:['celestial map','star chart','constellation atlas','planisphere','uranometria'],met:['celestial','astronomy','constellation'],re:/celestial|star|constellation|planisphere|astronom|zodiac|uranometria|sky|himmel/i},
  plans:{loc:['city plan','plan of the city',"bird's-eye view"],wm:['old city plan','historic city map','town plan','panoramic view city map'],re:/plan|map|view|vue|panorama|karte|pianta|bird/i},
  charts:{loc:['nautical chart','chart of the coast','harbor chart'],wm:['nautical chart','sea chart','portolan','coast chart'],re:/chart|portolan|nautical|coast|harbo|sea|carta|maritime/i},
- science:{wm:['scientific diagram','astronomical diagram','cosmological diagram','geometric diagram','physics illustration','chart of the elements'],met:['astronomy','geometry','anatomy diagram'],re:/diagram|astronom|cosmolog|geometr|physic|chemi|element|optic|scheme|figure|illustration|plate|machine|engineering/i},
+ science:{wm:['scientific diagram','astronomical diagram','cosmological diagram','geometric diagram','physics illustration','chart of the elements','mnemonic diagram','memory palace','tree of knowledge','ars memorativa','diagram of the sciences'],met:['astronomy','geometry','anatomy diagram'],re:/diagram|astronom|cosmolog|geometr|physic|chemi|element|optic|scheme|figure|illustration|plate|machine|engineering|mnemonic|memor|tree|knowledge|wheel/i},
  nature:{wm:['anatomical plate','botanical plate','natural history plate','zoological illustration','kunstformen der natur','scientific illustration'],met:['botanical','natural history','anatomy'],re:/plate|illustration|anatom|botan|zoolog|natural|flora|fauna|specimen|kunstformen|tafel|drawing|engraving/i},
- mnemonic:{wm:['mnemonic diagram','memory palace','ars memorativa','tree of knowledge','mnemonic chart','diagram of the sciences','tree of porphyry'],re:/mnemonic|memor|ars |tree|diagram|knowledge|porphyr|schema|table|chart|wheel/i},
  animals:{loc:['zoo','menagerie','circus animals','horses','dogs','birds','elephant'],locp:'photos',wm:['historical zoo photograph','menagerie engraving','taxidermy museum specimen','vintage animal photograph','circus animal poster','natural history animal illustration','newspaper clipping animal','museum zoological collection historic'],met:['animal','dog','horse','bird','lion','fish','elephant','insect'],re:/animal|zoo|menagerie|bird|fish|dog|cat|horse|cattle|elephant|lion|tiger|monkey|ape|insect|specimen|taxiderm|fauna|natural history|circus|beast|livestock|wildlife|cow|sheep|pig/i}
 };
-const LABEL={maps:'map',stars:'star chart',plans:'city plan',charts:'sea chart',science:'scientific diagram',nature:'natural history plate',mnemonic:'mnemonic diagram',animals:'animals'};
+const LABEL={maps:'map',stars:'star chart',plans:'city plan',charts:'sea chart',science:'scientific diagram',nature:'natural history plate',animals:'animals'};
 const BAD=/\b(logo|icon|screenshot|banner|flag of|coat of arms|banknote|stamp|signature|userbox)\b/i;
 const clean=s=>(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/\s+/g,' ').replace(/[\s\/:;,.]+$/,'').trim();
 const first=v=>Array.isArray(v)?v[0]:v;
@@ -105,6 +104,37 @@ function markSeen(p){
 }
 
 /* --- sources --- */
+const PROXY='https://maps-heaven.sunwooy19.workers.dev/'; // paste your cloudflare worker url here to switch on smithsonian + bhl
+const SIQ={maps:['map','atlas'],stars:['celestial chart','star chart'],charts:['nautical chart'],plans:['city plan'],science:['scientific diagram','astronomical chart','scientific illustration','mnemonic diagram'],nature:['botanical illustration','natural history illustration','anatomical illustration'],animals:['animal photograph','taxidermy specimen','zoo photograph','bird illustration','animal print']};
+const BHLQ={maps:['atlas maps'],stars:['astronomy atlas'],science:['anatomy plates','astronomy diagrams','physics plates'],nature:['botanical plates','natural history plates','fishes plates'],animals:['birds plates','mammals plates','insects plates','animals illustrations']};
+async function fromSI(tp,era){
+ const q=pick(SIQ[tp])+' AND online_media_type:"Images"';
+ const j=await getJSON(PROXY+'/si?q='+encodeURIComponent(q)+'&rows=40&start='+rnd(0,200)+'&sort=random');
+ const c=((j.response&&j.response.rows)||[]).map(r=>{
+  const d=r.content||{},dn=d.descriptiveNonRepeating||{},fr=d.freetext||{};
+  const m=((dn.online_media||{}).media||[]).find(x=>/image/i.test(x.type||'')&&(!x.usage||x.usage.access==='CC0'));
+  if(!m)return null;
+  const img=m.content+(/ids\.si\.edu/.test(m.content)?(m.content.includes('?')?'&':'?')+'max_w=1400':'');
+  return{id:'si:'+r.id,img,title:clean((dn.title&&dn.title.content)||r.title),by:clean(((fr.name||[])[0]||{}).content),date:clean(((fr.date||[])[0]||{}).content),source:'smithsonian',link:dn.record_link,rights:'cc0 · '+clean(dn.data_source)};
+ }).filter(Boolean);
+ return choose(c,era);
+}
+async function fromBHL(tp,era){
+ const b=op=>PROXY+'/bhl?op='+op;
+ const sr=await getJSON(b('PublicationSearch')+'&searchterm='+encodeURIComponent(pick(BHLQ[tp]))+'&searchtype=C&page='+rnd(1,5));
+ const hits=(sr.Result||[]).filter(r=>r.ItemID);
+ if(!hits.length)throw new Error('no results');
+ const it=pick(hits);
+ const m=await getJSON(b('GetItemMetadata')+'&id='+it.ItemID+'&pages=t&ocr=f&parts=f',15000);
+ let R=m.Result;if(Array.isArray(R))R=R[0];R=R||{};
+ const pages=(R.Pages||[]).filter(p=>(p.PageTypes||[]).some(t=>/illustration|plate|map|chart|diagram|table/i.test(t.PageTypeName||'')));
+ if(!pages.length)throw new Error('no illustrated pages');
+ const c=pages.sort(()=>Math.random()-.5).slice(0,12).map(p=>({id:'bhl:'+p.PageID,img:'https://www.biodiversitylibrary.org/pageimage/'+p.PageID,
+  title:clean(R.ShortTitle||R.Title||it.Title||'')+(p.PageNumbers&&p.PageNumbers[0]&&p.PageNumbers[0].Number?', p. '+p.PageNumbers[0].Number:''),
+  by:clean(((R.Authors||it.Authors||[])[0]||{}).Name||''),date:clean(String(R.Year||R.StartYear||it.PublicationDate||'')),
+  source:'biodiversity heritage library',link:'https://www.biodiversitylibrary.org/page/'+p.PageID,rights:'see source page for rights'}));
+ return choose(c,era);
+}
 async function fromLoC(tp,era){
  const t=TOPICS[tp],q=encodeURIComponent(pick(t.loc));
  const u=d=>`https://www.loc.gov/${t.locp||'maps'}/?q=${q}${d?'&dates='+d:''}&fo=json&c=25&sp=${rnd(1,30)}&at=results`;
@@ -152,6 +182,8 @@ async function fetchPlate(){
   const srcs=[['wikimedia commons',fromCommons]];
   if(t.loc)srcs.push(['library of congress',fromLoC]);
   if(t.met)srcs.push(['the met museum',fromMet]);
+  if(PROXY&&SIQ[tp])srcs.push(['smithsonian',fromSI]);
+  if(PROXY&&BHLQ[tp])srcs.push(['biodiversity heritage library',fromBHL]);
   const [name,f]=pick(srcs);
   try{const p=await f(tp,era);p.kind=tp;p.el=await loadImg(p.img);markSeen(p);return p}
   catch(e){errs.push(name+': '+(e.name==='AbortError'?'request timed out':e.message))}
